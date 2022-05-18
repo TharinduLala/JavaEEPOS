@@ -1,0 +1,110 @@
+#mysql -h localhost -p 1234 -u root
+DROP DATABASE IF EXISTS JavaEEPOS;
+CREATE DATABASE IF NOT EXISTS JavaEEPOS;
+SHOW DATABASES ;
+USE JavaEEPOS;
+#-------------------
+
+
+DROP TABLE IF EXISTS Customer;
+CREATE TABLE IF NOT EXISTS Customer(
+    customerId VARCHAR(30),
+    customerName VARCHAR(40) NOT NULL DEFAULT 'Unknown',
+    customerAddress VARCHAR(100),
+    contactNo VARCHAR(15),
+    CONSTRAINT PRIMARY KEY (customerId)
+    );
+SHOW TABLES ;
+DESCRIBE Customer;
+#---------------------
+DROP TABLE IF EXISTS Item;
+CREATE TABLE IF NOT EXISTS Item(
+    itemCode VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    qtyOnHand INT DEFAULT 0,
+    unitPrice decimal(10,2),
+    PRIMARY KEY (itemCode)
+    );
+SHOW TABLES ;
+DESCRIBE Item;
+#------------------------
+DROP TABLE IF EXISTS `Order`;
+CREATE TABLE IF NOT EXISTS `Order`(
+    orderId VARCHAR(255),
+    orderDate DATE,
+    customerId VARCHAR(30),
+    total decimal(10,2),
+    `discount(%)` decimal(10,2),
+    netTotal decimal(10,2),
+    CONSTRAINT PRIMARY KEY (OrderId),
+    CONSTRAINT FOREIGN KEY (customerId) REFERENCES Customer(customerId) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+SHOW TABLES ;
+DESCRIBE `Order`;
+#-----------------------
+
+DROP TABLE IF EXISTS `Order Detail`;
+CREATE TABLE IF NOT EXISTS `Order Detail`(
+    orderId VARCHAR(255),
+    itemCode VARCHAR(255),
+    unitPrice decimal(10,2),
+    qty INT,
+    total decimal(10,2),
+    CONSTRAINT PRIMARY KEY (ItemCode, OrderId),
+    CONSTRAINT FOREIGN KEY (ItemCode) REFERENCES Item(ItemCode) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY (OrderId) REFERENCES `Order`(OrderId) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+SHOW TABLES ;
+DESCRIBE `Order Detail`;
+
+insert into  customer values('2001','kamla','title','panadura','panadura','west','12500');
+
+insert into  `order` values('1','2001','2021-08-08',100.255,90.2);
+
+insert into  item values('001','2001',1,10,100);
+
+insert into  `order detail` values('1','001',2,10,5);
+
+
+
+
+
+
+Insert Into driverdetail Values('I-002', 'Description two','15',71444,'2001/02/24');
+
+CASCADE: if a row from the parent table is deleted or updated, 
+the values of the matching rows in the child table automatically 
+deleted or updated.
+
+SET NULL:  if a row from the parent table is deleted or updated, 
+the values of the foreign key column (or columns) in the child 
+table are set to NULL.
+
+RESTRICT:  if a row from the parent table has a matching row in
+ the child table, MySQL rejects deleting or updating rows in the 
+parent table.
+NO ACTION: is the same as RESTRICT.
+
+SET DEFAULT: is recognized by the MySQL parser. However, 
+this action is rejected by both InnoDB and NDB tables.
+
+StudentId int NOT NULL AUTO_INCREMENT PRIMARY KEY,AUTO_INCREMENT=1000;
+
+
+
+
+SELECT * FROM projects WHERE YEAR(Date) = 2011 AND MONTH(Date) = 5
+INSERT INTO A (name) VALUES ('Namal');
+ALTER TABLE A AUTO_INCREMENT=001;
+Personid int NOT NULL AUTO_INCREMENT,
+
+
+SELECT COUNT(customerId) from Customer;
+
+ //SELECT * FROM `order` WHERE `orderDate` BETWEEN '2021-11-01' AND '2021-11-30';
+
+
+
+INSERT INTO Customer (customerId,customerName,customerTitle,customerAddress,city,province,postalCode) VALUES ('200105500870','kamal','dealer','Munagama','Horana','western','12500');
+
+INSERT INTO Customer (customerId,customerName,customerTitle,customerAddress,city,province,postalCode) VALUES ('988888888V','Nimal','customer','Hirana','Panadura','western','12600');
