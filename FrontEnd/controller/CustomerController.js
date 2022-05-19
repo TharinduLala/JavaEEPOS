@@ -23,19 +23,6 @@ $('#btnClearCustomerFields').click(function () {
 });
 
 $('#btnSearchCustomer').click(function () {
-    /*let customer = searchCustomer($("#txtSearchCustomer").val());*/
-    /*if (customer) {
-        $("#txtCustomerId").val(customer.getCustomerId());
-        $("#txtCustomerName").val(customer.getCustomerName());
-        $("#txtCustomerAddress").val(customer.getCustomerAddress());
-        $("#txtCustomerContact").val(customer.getCustomerContact());
-        $("#txtCustomerId").attr('readonly', true);
-        $('#btnUpdateCustomer').attr('disabled', false);
-        $('#btnRemoveCustomer').attr('disabled', false);
-    } else {
-        clearAll();
-        alert("No Such a Customer");
-    }*/
     searchCustomer();
 });
 
@@ -64,27 +51,26 @@ function searchCustomer() {
         url: "http://localhost:8081/backEnd/customer?option=SEARCH&customerId=" + cId,
         method: "GET",
         success: function (response) {
-            let id;
-            let name;
-            let address;
-            let contact;
-            for (const customer of response.data) {
-                id = customer.id;
-                name = customer.name;
-                address = customer.address;
-                contact = customer.contact;
-
+            if (response.status == 400) {
+                alert(response.message);
+            } else {
+                const customer = response.data;
+                let id = customer.id;
+                let name = customer.name;
+                let address = customer.address;
+                let contact = customer.contact;
+                $("#txtCustomerId").val(id);
+                $("#txtCustomerName").val(name);
+                $("#txtCustomerAddress").val(address);
+                $("#txtCustomerContact").val(contact);
+                $("#txtCustomerId").attr('readonly', true);
+                $('#btnUpdateCustomer').attr('disabled', false);
+                $('#btnRemoveCustomer').attr('disabled', false);
             }
-            $("#txtCustomerId").val(id);
-            $("#txtCustomerName").val(name);
-            $("#txtCustomerAddress").val(address);
-            $("#txtCustomerContact").val(contact);
-            $("#txtCustomerId").attr('readonly', true);
-            $('#btnUpdateCustomer').attr('disabled', false);
-            $('#btnRemoveCustomer').attr('disabled', false);
         }
+
     });
-}
+}//Done
 
 function removeCustomer(removeId) {
     let response = confirm("Do you want to remove this Customer..?");
@@ -131,11 +117,15 @@ function loadAllCustomers() {
         url: "http://localhost:8081/backEnd/customer?option=GET_ALL",
         method: "GET",
         success: function (response) {
-            for (const customer of response.data) {
-                let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.contact}</td></tr>`;
-                $("#customerTable").append(row);
+            if (response.status == 201) {
+                for (const customer of response.data) {
+                    let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.contact}</td></tr>`;
+                    $("#customerTable").append(row);
+                }
+                bindTableClickEvent();
+            } else {
+                alert("Problem while loading customers")
             }
-            bindTableClickEvent();
         }
     });
 
