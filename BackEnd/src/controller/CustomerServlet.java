@@ -30,13 +30,13 @@ public class CustomerServlet extends HttpServlet {
             resp.setContentType("application/json");
             Connection connection = dataSource.getConnection();
             PrintWriter writer = resp.getWriter();
-
+            ResultSet resultSet = null;
             switch (option) {
                 case "SEARCH":
                     PreparedStatement statement = connection.prepareStatement("select * from Customer WHERE customerId=?");
                     statement.setObject(1,customerId);
-                    ResultSet resultSet = statement.executeQuery();
-                    JsonArrayBuilder arrayBuilder1 = Json.createArrayBuilder();
+                    resultSet = statement.executeQuery();
+                   /* JsonArrayBuilder arrayBuilder1 = Json.createArrayBuilder();
 
                     while (resultSet.next()) {
                         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
@@ -53,30 +53,33 @@ public class CustomerServlet extends HttpServlet {
                     response1.add("message", "Done");
                     response1.add("data", arrayBuilder1.build());
 
-                    writer.print(response1.build());
+                    writer.print(response1.build());*/
                     break;
                 case "GET_ALL":
-                    ResultSet rst = connection.prepareStatement("select * from Customer").executeQuery();
-                    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-
-                    while (rst.next()) {
-                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-                        objectBuilder.add("id", rst.getString(1));
-                        objectBuilder.add("name", rst.getString(2));
-                        objectBuilder.add("address", rst.getString(3));
-                        objectBuilder.add("contact", rst.getString(4));
-                        arrayBuilder.add(objectBuilder.build());
-                    }
-
-
-                    JsonObjectBuilder response = Json.createObjectBuilder();
-                    response.add("status", 201);
-                    response.add("message", "Done");
-                    response.add("data", arrayBuilder.build());
-
-                    writer.print(response.build());
+                    resultSet= connection.prepareStatement("select * from Customer").executeQuery();
                     break;
             }
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                    objectBuilder.add("id", resultSet.getString(1));
+                    objectBuilder.add("name", resultSet.getString(2));
+                    objectBuilder.add("address", resultSet.getString(3));
+                    objectBuilder.add("contact", resultSet.getString(4));
+                    arrayBuilder.add(objectBuilder.build());
+                }
+                response.add("status", 201);
+                response.add("message", "Done");
+                response.add("data", arrayBuilder.build());
+            }else {
+                response.add("status", 400);
+                response.add("message", "Error");
+                response.add("data", "No result found");
+            }
+
+            writer.print(response.build());
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
