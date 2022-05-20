@@ -29,26 +29,6 @@ public class CustomerBOImpl implements CustomerBO {
     }
 
     @Override
-    public boolean addNewCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public boolean updateCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public boolean ifCustomerExist(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.ifCustomerExist(id);
-    }
-
-    @Override
-    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
     public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
         Customer customer = customerDAO.search(id);
         return new CustomerDTO(
@@ -57,5 +37,35 @@ public class CustomerBOImpl implements CustomerBO {
                 customer.getAddress(),
                 customer.getContactNo()
         );
+    }
+
+    @Override
+    public boolean addNewCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
+        return customerDAO.add(new Customer(
+                customerDTO.getCustomerId(),
+                customerDTO.getCustomerName(),
+                customerDTO.getCustomerAddress(),
+                customerDTO.getCustomerContactNo()
+        ));
+    }
+
+    @Override
+    public boolean updateCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
+        return customerDAO.update(new Customer(
+                customerDTO.getCustomerId(),
+                customerDTO.getCustomerName(),
+                customerDTO.getCustomerAddress(),
+                customerDTO.getCustomerContactNo()
+        ));
+    }
+
+    @Override
+    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
+        return customerDAO.remove(id);
+    }
+
+    @Override
+    public boolean ifCustomerExist(String id) throws SQLException, ClassNotFoundException {
+        return customerDAO.ifCustomerExist(id);
     }
 }

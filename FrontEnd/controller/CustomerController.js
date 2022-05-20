@@ -5,17 +5,15 @@ $("#customersLink").click(function () {
 });
 
 $('#btnSaveCustomer').click(function () {
-    saveCustomer();
+    saveCustomer("customerForm1");
 });
 
-$('#btnUpdateCustomer').click(function () {
-    let updateId = $("#txtCustomerId").val();
-    updateCustomer(updateId);
+$("#btnUpdateCustomer").click(function () {
+    updateCustomer();
 });
 
-$('#btnRemoveCustomer').click(function () {
-    let removeId = $("#txtCustomerId").val();
-    removeCustomer(removeId);
+$("#btnRemoveCustomer").click(function () {
+    removeCustomer();
 });
 
 $('#btnClearCustomerFields').click(function () {
@@ -26,24 +24,27 @@ $('#btnSearchCustomer').click(function () {
     searchCustomer();
 });
 
-function saveCustomer() {
-    let customerID = $("#txtCustomerId").val();
-    if (isCustomerExist(customerID)) {
-        alert("This customer id already exist..");
-    } else {
-        let response = confirm("Do you want to add this Customer..?");
-        if (response) {
-            let customerName = $("#txtCustomerName").val();
-            let customerAddress = $("#txtCustomerAddress").val();
-            let customerContact = $("#txtCustomerContact").val();
-
-            let customerDto = new CustomerDto(customerID, customerName, customerAddress, customerContact);
-
-            customerDB.push(customerDto);
-            clearAll();
-        }
+function saveCustomer(formId) {
+    let form="#"+formId;
+    let formData = $(form).serialize();
+    let decision = confirm("Do you want to add this Customer..?");
+    if (decision){
+        $.ajax({
+            url:"http://localhost:8081/backEnd/customer",
+            method:"POST",
+            data:formData,
+            success:function (response) {
+                if (response.status==200){
+                    alert(response.message);
+                    clearAll();
+                }else {
+                    alert(response.message);
+                }
+            }
+        });
     }
-}
+
+}//done
 
 function searchCustomer() {
     let cId = $("#txtSearchCustomer").val();
@@ -72,44 +73,51 @@ function searchCustomer() {
     });
 }//Done
 
-function removeCustomer(removeId) {
-    let response = confirm("Do you want to remove this Customer..?");
-    if (response) {
-        for (let i = 0; i < customerDB.length; i++) {
-            if (customerDB[i].getCustomerId() === removeId) {
-                customerDB.splice(i, 1);
-            }
+function removeCustomer() {
+    let removeId = $("#txtCustomerId").val();
+    let decision = confirm("Do you want to remove this Customer..?");
+    if (decision) {
+        $.ajax({
+            url: "http://localhost:8081/backEnd/customer?customerId="+removeId,
+            method: "DELETE",
+            success: function (res) {
+                if (res.status == 200) {
+                    alert(res.message);
+                    clearAll()
+                } else {
+                    alert(res.message);
+                }
+            },
+        });
+    }
+}//done
+
+function updateCustomer() {
+    let condition = confirm("Do you want to save changes..?");
+    if (condition) {
+        let customer={
+            id:$("#txtCustomerId").val(),
+            name:$("#txtCustomerName").val(),
+            address:$("#txtCustomerAddress").val(),
+            contactNo:$("#txtCustomerContact").val()
         }
-        loadAllCustomers();
-        clearAll();
-    }
-}
-
-function updateCustomer(updateId) {
-    let response = confirm("Do you want to save changes..?");
-    if (response) {
-        let customerID = $("#txtCustomerId").val();
-        let customerName = $("#txtCustomerName").val();
-        let customerAddress = $("#txtCustomerAddress").val();
-        let customerContact = $("#txtCustomerContact").val();
-
-        let customerDto = new CustomerDto(customerID, customerName, customerAddress, customerContact);
-
-        for (let i = 0; i < customerDB.length; i++) {
-            if (customerDB[i].getCustomerId() === updateId) {
-                customerDB[i] = customerDto;
+        $.ajax({
+            url:"http://localhost:8081/backEnd/customer",
+            method:"PUT",
+            data: JSON.stringify(customer),
+            contentType:"application/json",
+            success:function (response) {
+                if (response.status==200){
+                    alert(response.message);
+                    clearAll();
+                }else {
+                    alert(response.message);
+                }
             }
-        }
-        loadAllCustomers();
-        clearAll();
+        });
     }
-}
+}//done
 
-function isCustomerExist(id) {
-    for (let i = 0; i < customerDB.length; i++) {
-        return customerDB[i].getCustomerId() === id;
-    }
-}
 
 function loadAllCustomers() {
     $("#customerTable").empty();
@@ -129,16 +137,16 @@ function loadAllCustomers() {
         }
     });
 
-}
+}//done
 
 function clearAll() {
     $('#txtCustomerId,#txtCustomerName,#txtCustomerAddress,#txtCustomerContact,#txtSearchCustomer').val("");
     $("#txtCustomerId").attr('readonly', false);
-    loadAllCustomers();
     $('#btnUpdateCustomer').attr('disabled', true);
     $('#btnRemoveCustomer').attr('disabled', true);
+    loadAllCustomers();
 
-}
+}//done
 
 function bindTableClickEvent() {
     $("#customerTable>tr").click(function () {
@@ -155,4 +163,11 @@ function bindTableClickEvent() {
         $('#btnUpdateCustomer').attr('disabled', false);
         $('#btnRemoveCustomer').attr('disabled', false);
     });
+}//done
+
+
+function isCustomerExist(id) {
+    for (let i = 0; i < customerDB.length; i++) {
+        return customerDB[i].getCustomerId() === id;
+    }
 }
