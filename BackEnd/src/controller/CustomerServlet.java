@@ -6,7 +6,6 @@ import dto.CustomerDTO;
 
 import javax.annotation.Resource;
 import javax.json.*;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -186,7 +185,7 @@ public class CustomerServlet extends HttpServlet {
         String customerId = req.getParameter("customerId");
 
         try {
-            if (customerBO.ifCustomerExist(customerId)){
+            if (customerBO.ifCustomerExist(customerId)) {
                 boolean b = customerBO.deleteCustomer(customerId);
                 JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
                 if (b) {
@@ -199,7 +198,7 @@ public class CustomerServlet extends HttpServlet {
                     objectBuilder.add("data", "Error");
                 }
                 writer.print(objectBuilder.build());
-            }else {
+            } else {
                 JsonObjectBuilder response = Json.createObjectBuilder();
                 response.add("status", 400);
                 response.add("message", "No customer from this id");

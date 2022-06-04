@@ -3,9 +3,7 @@ package bo.custom.impl;
 import bo.custom.ItemBO;
 import dao.DAOFactory;
 import dao.custom.ItemDAO;
-import dto.CustomerDTO;
 import dto.ItemDTO;
-import entity.Customer;
 import entity.Item;
 
 import java.sql.SQLException;
@@ -31,26 +29,6 @@ public class ItemBOImpl implements ItemBO {
     }
 
     @Override
-    public boolean addNewItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public boolean updateItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public boolean ifItemExist(String code) throws SQLException, ClassNotFoundException {
-        return itemDAO.ifItemExist(code);
-    }
-
-    @Override
-    public boolean deleteItem(String code) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
     public ItemDTO searchItem(String code) throws SQLException, ClassNotFoundException {
         Item item = itemDAO.search(code);
         return new ItemDTO(
@@ -59,5 +37,35 @@ public class ItemBOImpl implements ItemBO {
                 item.getQtyOnHand(),
                 item.getUnitPrice()
         );
+    }
+
+    @Override
+    public boolean addNewItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+        return itemDAO.add(new Item(
+                itemDTO.getItemCode(),
+                itemDTO.getItemDescription(),
+                itemDTO.getItemQtyOnHand(),
+                itemDTO.getItemUnitPrice()
+        ));
+    }
+
+    @Override
+    public boolean updateItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+        return itemDAO.update(new Item(
+                itemDTO.getItemCode(),
+                itemDTO.getItemDescription(),
+                itemDTO.getItemQtyOnHand(),
+                itemDTO.getItemUnitPrice()
+        ));
+    }
+
+    @Override
+    public boolean deleteItem(String code) throws SQLException, ClassNotFoundException {
+        return itemDAO.remove(code);
+    }
+
+    @Override
+    public boolean ifItemExist(String code) throws SQLException, ClassNotFoundException {
+        return itemDAO.ifItemExist(code);
     }
 }

@@ -166,8 +166,8 @@ function bindTableClickEvent() {
 }//done
 
 
-function isCustomerExist(id) {
-    for (let i = 0; i < customerDB.length; i++) {
-        return customerDB[i].getCustomerId() === id;
-    }
-}
+// function isCustomerExist(id) {
+//     for (let i = 0; i < customerDB.length; i++) {
+//         return customerDB[i].getCustomerId() === id;
+//     }
+// }

@@ -82,46 +82,52 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <div class="mb-2">
-                            <label class="form-label" for="txtCusid">Customer Id</label>
-                            <input
-                                    class="form-control"
-                                    id="txtCusid"
-                                    placeholder="Customer Id"
-                                    type="text"
-                            />
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label" for="txtCusname"
-                            >Customer name</label
-                            >
-                            <input
-                                    class="form-control"
-                                    id="txtCusname"
-                                    placeholder="Customer name"
-                                    type="text"
-                            />
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label" for="txtCusaddress">Address</label>
-                            <input
-                                    class="form-control"
-                                    id="txtCusaddress"
-                                    placeholder="Customer Address"
-                                    type="text"
-                            />
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label" for="txtCusContact"
-                            >Contact Number</label
-                            >
-                            <input
-                                    class="form-control"
-                                    id="txtCusContact"
-                                    placeholder="Contact No."
-                                    type="text"
-                            />
-                        </div>
+                        <form id="customerForm2">
+                            <div class="mb-2">
+                                <label class="form-label" for="txtCusid">Customer Id</label>
+                                <input
+                                        class="form-control"
+                                        id="txtCusid"
+                                        name="customerId"
+                                        placeholder="Customer Id"
+                                        type="text"
+                                />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="txtCusname"
+                                >Customer name</label
+                                >
+                                <input
+                                        class="form-control"
+                                        id="txtCusname"
+                                        name="customerName"
+                                        placeholder="Customer name"
+                                        type="text"
+                                />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="txtCusaddress">Address</label>
+                                <input
+                                        class="form-control"
+                                        id="txtCusaddress"
+                                        name="customerAddress"
+                                        placeholder="Customer Address"
+                                        type="text"
+                                />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="txtCusContact"
+                                >Contact Number</label
+                                >
+                                <input
+                                        class="form-control"
+                                        id="txtCusContact"
+                                        name="customerContactNo"
+                                        placeholder="Contact No."
+                                        type="text"
+                                />
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -478,46 +484,52 @@
                     </div>
                 </div>
                 <div class="row mt-4 ">
-                    <div class="mb-2">
-                        <label class="form-label" for="txtItemCode">Item Code</label>
-                        <input
-                                class="form-control"
-                                id="txtItemCode"
-                                placeholder="Item Code"
-                                type="text"
-                        />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label" for="txtItemDescription"
-                        >Description</label
-                        >
-                        <input
-                                class="form-control"
-                                id="txtItemDescription"
-                                placeholder="Description"
-                                type="text"
-                        />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label" for="txtUnitPrice">Unit Price</label>
-                        <input
-                                class="form-control"
-                                id="txtUnitPrice"
-                                placeholder="Unit Price"
-                                type="text"
-                        />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label" for="txtQtyOnHand"
-                        >Qty On Hand</label
-                        >
-                        <input
-                                class="form-control"
-                                id="txtQtyOnHand"
-                                placeholder="Qty On Hand."
-                                type="text"
-                        />
-                    </div>
+                    <form id="itemForm">
+                        <div class="mb-2">
+                            <label class="form-label" for="txtItemCode">Item Code</label>
+                            <input
+                                    class="form-control"
+                                    id="txtItemCode"
+                                    name="code"
+                                    placeholder="Item Code"
+                                    type="text"
+                            />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="txtItemDescription"
+                            >Description</label
+                            >
+                            <input
+                                    class="form-control"
+                                    id="txtItemDescription"
+                                    name="description"
+                                    placeholder="Description"
+                                    type="text"
+                            />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="txtUnitPrice">Unit Price</label>
+                            <input
+                                    class="form-control"
+                                    id="txtUnitPrice"
+                                    name="unitPrice"
+                                    placeholder="Unit Price"
+                                    type="text"
+                            />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="txtQtyOnHand"
+                            >Qty On Hand</label
+                            >
+                            <input
+                                    class="form-control"
+                                    id="txtQtyOnHand"
+                                    name="qtyOnHand"
+                                    placeholder="Qty On Hand"
+                                    type="text"
+                            />
+                        </div>
+                    </form>
                     <div class=" ">
                         <button class="btn btn-success" id="btnSaveItem" type="button">Save</button>
                         <button class="btn btn-warning" id="btnUpdateItem" type="button">Update</button>
@@ -614,6 +626,8 @@
     $("#ordersSection").css("display", "none");
     setDate();
     setNewOrderId();
+    loadItemCodes();
+    $('#btnProceedOrder').attr('disabled', true);
 
     $("#newOrderLink").click(function () {
         $("#newOrderSection").css("display", "block");

@@ -9,5 +9,6 @@ import java.sql.SQLException;
 public interface ItemDAO extends CrudDAO<Item,String> {
 
     boolean ifItemExist(String code) throws SQLException, ClassNotFoundException;
+    boolean updateQty (String code,int qty) throws SQLException, ClassNotFoundException;
 
 }

@@ -23,12 +23,16 @@ public class DAOFactory {
                 return new CustomerDAOImpl();
             case ITEM:
                 return new ItemDAOImpl();
+            case ORDER:
+                return new OrderDAOImpl();
+            case ORDERDETAILS:
+                return new OrderDetailDAOImpl();
             default:
                 return null;
         }
     }
 
     public enum DAOTypes {
-        CUSTOMER,ITEM
+        CUSTOMER,ITEM,ORDER,ORDERDETAILS
     }
 }
